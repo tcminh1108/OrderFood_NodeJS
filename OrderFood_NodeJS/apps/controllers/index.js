@@ -4,6 +4,7 @@ router.get("/", function(req,res){
     res.json({"message": "đây là home pages"});
     res.json({"message": "đây là home pages"});
     res.json({"message": "xin chao"});
+    res.json({"message": "xin chao ngay 2"});
 });
 module.exports = router;
 //
