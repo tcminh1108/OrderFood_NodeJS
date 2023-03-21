@@ -14,6 +14,7 @@ app.set("views",__dirname + "/apps/views");
 app.set("view engine", "ejs");
 //chỉ đường dẫn tới public để lấy các file trong css và js
 app.use("/public", express.static(__dirname + "/public"));
+// port 3000
 var server = app.listen(3000, function(){
-    console.log("server is running");
+    console.log("server is running");       
 });
