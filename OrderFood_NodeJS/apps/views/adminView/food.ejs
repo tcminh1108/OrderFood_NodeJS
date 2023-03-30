@@ -1,0 +1,155 @@
+<div class="content-wrapper">
+  <div style="background-color: white; padding: 10px;">
+    <div>
+      <h2 style="display: flex; justify-content: space-between; align-items: center;">
+        <strong>Food Manage </strong>
+        <button type="button" data-toggle="modal" data-target="#add" style="vertical-align:middle"
+          class="btn btn-success add-button">Add New</button>
+      </h2>
+      <h3 style="border-bottom: 1px solid #ccc;"></h3>
+    </div>
+    <table id="table" class="display" style="width:100%">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Image</th>
+          <th>Discount</th>
+          <th>Category</th>
+          <th>Function</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    // Tạo DataTable từ bảng HTML
+    var table;
+    $.get("/admin/getFoodList", function (data) {
+      //alert(`data=${JSON.stringify(data)}`)
+      table = $('#table').DataTable({
+        "processing": true,
+        data,
+        columns: [
+          { data: 'name' },
+          { data: 'price' },
+          {
+            data: 'image',
+            render: function (data, type, row, meta) {
+              return '<img style="width: 100px; height: 100px;" src="' + data + '"/>';
+            }
+          },
+          { data: 'discount' },
+          {
+            render: function (data, type, row) {
+              var category_name = '';
+              $.get("/admin/getCategoryById/" + row.category_id, function (category) {
+                category_name = category.name;
+              });
+              return category_name;
+              //return "<span>loading...</span>";
+            }
+          },
+          {
+            data: null,
+            "defaultContent": "<button>Edit</button><button>Delete</button>"
+          }
+        ]
+      });
+    });
+  });
+</script>
+
+<!-- Popup Add -->
+<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <center>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"><strong>ADD</strong></h4>
+        </center>
+      </div>
+      <div class="modal-body">
+        <form action="/admin/addFood" method="post">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name">
+          </div>
+          <div class="form-group">
+            <label for="image">Image</label>
+            <input type="text" class="form-control" id="image" name="image">
+          </div>
+          <div class="form-group">
+            <label for="price">Price</label>
+            <input type="number" class="form-control" id="price" name="price">
+          </div>
+          <div class="form-group">
+            <label for="price">Discount</label>
+            <input type="number" class="form-control" id="discount" name="discount">
+          </div>
+          <div class="form-group">
+            <label for="price">Category</label>
+            <select class="form-control">
+              <% for( let item of categoryList ) {%>
+                <option value="<%=item._id%>">
+                  <%=item.name%>
+                </option>
+                <% } %>
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-success" id="save-button">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Popup Edit -->
+<div id="edit-modal" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <center>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"><strong>EDIT</strong></h4>
+        </center>
+      </div>
+      <div class="modal-body">
+        <form action="/admin/editFood" method="post">
+          <div class="form-group">
+            <label for="name">Id</label>
+            <input hidden type="text" class="form-control" id="_id" name="_id">
+          </div>
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name">
+          </div>
+          <div class="form-group">
+            <label for="image">Image</label>
+            <input type="text" class="form-control" id="image" name="image">
+          </div>
+          <div class="form-group">
+            <label for="price">Price</label>
+            <input type="number" class="form-control" id="price" name="price">
+          </div>
+          <div class="form-group">
+            <label for="price">Discount</label>
+            <input type="number" class="form-control" id="discount" name="discount">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-success" id="save-button">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
