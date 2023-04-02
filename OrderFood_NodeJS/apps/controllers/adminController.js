@@ -131,8 +131,4 @@ router.get("/cartDetailManage/:cart_id", async function (req, res) {
     res.render("adminView/adminPage", {page: 'cartDetailManage', data});
 });
 
-router.get("/test/:id", async function (req, res) {
-    res.send(req.params.id);
-});
-
 module.exports = router;
