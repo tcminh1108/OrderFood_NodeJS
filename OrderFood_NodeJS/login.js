@@ -10,6 +10,6 @@ async function login(req, res) {
     if (!password) {
         return { status: false, message: 'Vui lòng nhập mật khẩu!' };
     }
-}
+}s
 
 module.exports = { login };
